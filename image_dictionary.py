@@ -1,6 +1,7 @@
 import os
 import numpy as np
-from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.cluster import KMeans
+# from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics import euclidean_distances
 from sklearn.feature_extraction.image import extract_patches_2d, reconstruct_from_patches_2d
 
@@ -82,14 +83,15 @@ class ImageDictionary:
         if not os.path.exists("codebooks"):
             os.makedirs("codebooks")
         if "codebooks" not in filename:
-            filename = "codebooks/"+filename
-        np.save(filename, self.Phi)
+            np.save("codebooks/"+filename, self.Phi)
+        else:
+            np.save(filename, self.Phi)
 
     def load(self, filename:str = "dictionary.npy", n_clusters:int = 100, patch_size:int = 5, stride:int = 1):
         if "codebooks" not in filename:
-            filename = "codebooks/"+filename
-
-        self.Phi = np.load(filename)
+            self.Phi = np.load("codebooks/"+filename)
+        else:
+            self.Phi = np.load(filename)
 
         if self.n_clusters == -1:
             self.n_clusters = n_clusters
@@ -146,7 +148,9 @@ class ImageDictionary:
             Y[i] = reconstruct_from_patches_2d(img_patches, X.shape[1:])
 
         if save:
-            np.save(filename, Y)
+            if not os.path.exists("reconstructed"):
+                os.makedirs("reconstructed")
+            np.save("reconstructed/"+filename, Y)
         return Y
 
 
@@ -197,7 +201,7 @@ if __name__ == "__main__":
     random_indices = random.sample(range(len(recon_imgs)), 5)
 
     # Plot the images
-    fig, axes = plt.subplots(2, 5, figsize=(15, 3))
+    fig, axes = plt.subplots(2, 5, figsize=(15, 8))
 
     for i, ax in enumerate(axes.flatten()):
         # Display the image
