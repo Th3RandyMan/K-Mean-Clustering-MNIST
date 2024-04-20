@@ -30,7 +30,7 @@ def plot_images(original_images, recon_images, labels, figname="reconstructed.pn
 if __name__ == "__main__":
     dict_base_name = "dict"
     recon_base_name = "recon"
-    dictionary_sizes = [100]#[100, 500, 1000, 5000, 10000]
+    dictionary_sizes = [1000]#[100, 500, 1000, 5000, 10000] # left out 100
     patch_sizes = [5]
     strides = [1]
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
                     img_dict = ImageDictionary()
                     img_dict.load(filename)
 
-                img_dict.plot_dictionary(figname=filename[:-4]+".png")
+                #img_dict.plot_dictionary(figname=filename[:-4]+".png")
 
                 recon_imgs = img_dict.reconstruct(x_test, save=True, filename=f"{recon_base_name}_{dict_size}_{patch_size}_{stride}.npy")
                 plot_images(x_test, recon_imgs, y_test, figname=f"{recon_base_name}_{dict_size}_{patch_size}_{stride}.png")
